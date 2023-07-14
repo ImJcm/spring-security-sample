@@ -1,4 +1,4 @@
-package com.example.memo.configuration.security;
+package com.example.springsecuritysample.configuration.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -7,14 +7,21 @@ import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.security.Key;
 import java.util.Date;
+
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-@Slf4j
+@Slf4j(topic = "JwtUtil")
 @UtilityClass
 public class JwtUtil {
 	private final String AUTHORIZATION_HEADER = "Authorization";
@@ -42,6 +49,7 @@ public class JwtUtil {
 
 	public String getTokenFromHeader(HttpServletRequest request) {
 		String token = request.getHeader(AUTHORIZATION_HEADER);
+
 		if (StringUtils.hasText(token) && token.startsWith(BEARER_PREFIX)) {
 			return token.substring(VALUE_INDEX);
 		}
@@ -67,4 +75,23 @@ public class JwtUtil {
 	public Claims getUserInfoFromToken(String token) {
 		return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
 	}
+
+	/*
+		jwt token 생성 후, 클라이언트 cookie에 "Authorization"으로 저장
+	 */
+	/*public void addJwtToCookie(String jwtToken, HttpServletResponse response) {
+		try {
+			//JWT token값에 공백문자가 있으면 안되므로, 공백이 있는 경우 %20 아스키문자로 변환
+			jwtToken = URLEncoder.encode(jwtToken, "utf-8").replaceAll("\\+", "%20");
+
+			//AUTHTENTICATION_HEADER name으로 JWT token을 cookie로 저장
+			Cookie cookie = new Cookie(AUTHORIZATION_HEADER, jwtToken);
+			cookie.setPath("/");
+
+			//Response 객체에 Cookie 추가
+			response.addCookie(cookie);
+		} catch (UnsupportedEncodingException e) {
+			log.error(e.getMessage());
+		}
+	}*/
 }

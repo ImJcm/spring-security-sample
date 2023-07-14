@@ -1,9 +1,8 @@
-package com.example.memo.domain.entity;
+package com.example.springsecuritysample.domain.entity;
 
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.example.springsecuritysample.domain.model.AuthorizedMember;
+import jakarta.persistence.*;
+
 import java.time.LocalDateTime;
 import java.util.Set;
 import lombok.AllArgsConstructor;
@@ -22,7 +21,8 @@ public class Member {
 	@Setter
 	private String name;
 	private String password;
-	@ElementCollection
+	@ElementCollection(fetch = FetchType.LAZY)
+	//@ElementCollection(fetch=FetchType.EAGER)
 	private Set<String> roles;
 	private LocalDateTime createdAt;
 }

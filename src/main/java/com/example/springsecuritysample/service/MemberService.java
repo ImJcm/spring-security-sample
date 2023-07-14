@@ -1,35 +1,34 @@
-package com.example.memo.service;
+package com.example.springsecuritysample.service;
 
-import com.example.memo.configuration.security.JwtUtil;
-import com.example.memo.domain.entity.Member;
-import com.example.memo.domain.model.AuthorizedMember;
-import com.example.memo.dto.LoginRequest;
-import com.example.memo.dto.SignupRequest;
-import com.example.memo.repository.MemberRepository;
-import java.time.LocalDateTime;
-import java.util.Set;
+import com.example.springsecuritysample.configuration.security.JwtUtil;
+import com.example.springsecuritysample.domain.entity.Member;
+import com.example.springsecuritysample.domain.model.AuthorizedMember;
+import com.example.springsecuritysample.dto.LoginRequest;
+import com.example.springsecuritysample.dto.MemberInfo;
+import com.example.springsecuritysample.dto.SignupRequest;
+import com.example.springsecuritysample.repository.MemberRepository;
+import com.example.springsecuritysample.repository.MemberRolesRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.Set;
+
 @Service
 @RequiredArgsConstructor
-public class MemberService implements UserDetailsService {
+public class MemberService {
 
 	private final MemberRepository memberRepository;
+	private final MemberRolesRepository memberRolesRepository;
 	private final PasswordEncoder passwordEncoder;
 
-	@Override
-	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-		Member member = memberRepository.findByEmail(email);
-		if (member == null) {
-			throw new UsernameNotFoundException(email);
-		}
-		return new AuthorizedMember(member);
+	public MemberInfo getMemberInfo(AuthorizedMember authorizedMember) {
+		Member member = memberRolesRepository.findById(authorizedMember.getMember().getEmail()).orElse(null);
+		return new MemberInfo(authorizedMember.getMember().getEmail(), authorizedMember.getMember().getName(),member.getRoles());
+		//return new MemberInfo(authorizedMember.getMember().getEmail(), authorizedMember.getMember().getName(),authorizedMember.getMember().getRoles());
 	}
 
 	public void signup(SignupRequest signupRequest) {

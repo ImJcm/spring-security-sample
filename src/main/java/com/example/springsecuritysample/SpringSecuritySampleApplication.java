@@ -1,12 +1,12 @@
-package com.example.memo;
+package com.example.springsecuritysample;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class MemoApplication {
+public class SpringSecuritySampleApplication {
 	public static void main(String[] args) {
-		SpringApplication.run(MemoApplication.class, args);
+		SpringApplication.run(SpringSecuritySampleApplication.class, args);
 	}
 
 }

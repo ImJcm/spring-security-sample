@@ -1,10 +1,11 @@
-package com.example.memo.domain.model;
+package com.example.springsecuritysample.domain.model;
 
-import com.example.memo.domain.entity.Member;
+import com.example.springsecuritysample.domain.entity.Member;
 import java.util.Collections;
 import lombok.Getter;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.transaction.annotation.Transactional;
 
 @Getter
 public class AuthorizedMember extends User {

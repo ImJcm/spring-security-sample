@@ -1,4 +1,4 @@
-package com.example.memo.dto;
+package com.example.springsecuritysample.dto;
 
 import java.util.Set;
 
